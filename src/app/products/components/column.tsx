@@ -1,0 +1,57 @@
+"use client"
+
+import { ColumnDef } from "@tanstack/react-table"
+
+import { CellAction } from "./cell-action"
+
+export type ProductColumn = {
+    id: string
+    name: string
+    price: string
+    color: string
+    category: string
+    isFeatured: boolean
+    isArchived: boolean
+    createdAt: string
+}
+
+export const columns: ColumnDef<ProductColumn>[] = [
+    {
+        accessorKey: "name",
+        header: "Name",
+    },
+    {
+        accessorKey: "isArchive",
+        header: "Archived",
+    },
+    {
+        accessorKey: "isFeatured",
+        header: "Featured",
+    },
+    {
+        accessorKey: "price",
+        header: "Price",
+    },
+    {
+        accessorKey: "category",
+        header: "Category",
+    },
+    {
+        accessorKey: "color",
+        header: "Color",
+        cell: ({ row }) => (
+            <div className="h-6 w-6 rounded-full border m-auto" style={{ backgroundColor: row.original.color }}>
+
+            </div>
+
+        )
+    },
+    {
+        accessorKey: "createdAt",
+        header: "Date",
+    },
+    {
+        id: "actions",
+        cell: ({ row }) => <CellAction data={row.original} />
+    },
+]
