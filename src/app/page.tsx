@@ -1,9 +1,46 @@
-"use client";
-
+'use client'
+import { useRouter } from "next/router";
 import { Navbar } from "@/components/layout/navbar";
 import Image from "next/image";
-
+import { useState,useEffect } from "react";
+import axios from "axios";
 export default function Home() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const baseApi = "http://localhost:5152"
+  // email admin, password 123456
+  interface LoginRequest {
+    userEmail: string;
+    userPassword: string;
+  }
+  interface LoginResponse {
+    userId: string;
+    userEmail: string;
+    userFirstName: string;
+    userLastName: string;
+  }
+  
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const requestData: LoginRequest = {
+        userEmail: email,
+        userPassword: password,
+      };
+      const response = await axios.post(`${baseApi}/Auth/signin`, requestData);
+        if(response.status ==200){
+          console.log("status==","200")
+        }else{
+
+        }
+
+    } catch (err) {
+      setError("Invalid credentials. Please try again.");
+    }
+  };
   return (
     <>
       <Navbar />
@@ -20,7 +57,7 @@ export default function Home() {
           </div>
           <h1 className="text-4xl font-bold mb-5">Login</h1>
           <p className="text-[#C91416] mb-4">Sign into your account</p>
-          <form className="flex flex-col justify-center items-center">
+          <form className="flex flex-col justify-center items-center"  onSubmit={handleSubmit}>
             <div className="mb-3">
               <input
                 type="text"
@@ -44,6 +81,7 @@ export default function Home() {
               Login
             </button>
           </form>
+          {error && <p className="text-red-500">{error}</p>}
         </div>
       </div>
     </>
